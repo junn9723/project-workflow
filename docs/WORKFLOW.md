@@ -71,6 +71,29 @@
 
 ---
 
+## 2-1. Codex組み込み方針（ClaudeCode主導）
+
+ClaudeCodeは設計・調整・人間向けインターフェース（デザイン、日本語、小規模開発）を担い、Codexは定型化できる高負荷タスクを担当する。Codexへの依頼は `tasks/` に明示し、成果物フォーマットを統一する。
+
+### Codexの担当領域
+- 仕様書レビュー（`skills/spec-validate.md` の観点で差分指摘）
+- 大規模テスト実行（`scripts/run-tests.sh --all` / `scripts/self-verify.sh --full`）
+- コードレビュー（`skills/code-review.md` に準拠した観点整理）
+- 実装（TDDサイクルでの機能実装）
+
+### Codexタスクの標準テンプレ（推奨項目）
+- `assignee: codex`
+- `depends_on`: 先行Specやタスクを明示
+- `done_criteria`: 完了条件（例: 実行コマンド、ログ保存先、レビュー出力形式）
+- `artifacts`: 成果物の保存場所（例: `docs/reviews/` / `reports/tests/` など）
+
+### 成果物フォーマットの統一例
+- Specレビュー: 指摘箇所 / 根拠 / 修正提案
+- テスト結果: 実行コマンド / 成否 / 失敗ログ抜粋
+- コードレビュー: 変更概要 / 問題点 / 改善提案
+
+---
+
 ## 3. コンフリクト/不整合対策
 
 ### 3-1. 仕様と実装の一貫性
