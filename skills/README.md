@@ -13,6 +13,7 @@
 | code-review | `code-review.md` | コード品質レビュー | PR前 |
 | best-practices | `best-practices.md` | 業界水準検証 | マイルストーン完了時 |
 | spec-create | `spec-create.md` | スペック作成支援 | 新機能企画時 |
+| frontend-design | `frontend-design.md` | フロントエンドデザイン品質 | UIタスク実装時 |
 
 ## スキルの構造
 
@@ -45,4 +46,9 @@ test-run → [失敗] → self-improve → test-run → [成功] → code-review
 ### 新機能パイプライン
 ```
 spec-create → spec-validate → test-run(Red) → 実装 → test-run(Green)
+```
+
+### UI実装パイプライン
+```
+frontend-design(Step1) → test-run(Red) → 実装 → frontend-design(Step2-5) → test-run(Green) → code-review
 ```

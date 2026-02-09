@@ -33,6 +33,8 @@
 | `/plan-and-implement` | 計画→承認→TDD実装 |
 | `/update-claude-md` | 学びをCLAUDE.mdに反映 |
 
+> UIタスクの場合、`/plan-and-implement` 内で `skills/frontend-design.md` が自動適用されます。
+
 ## ディレクトリ構造
 
 ```

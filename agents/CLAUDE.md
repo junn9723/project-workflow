@@ -58,6 +58,13 @@
 1. skills/spec-create.md → スペック作成支援
 ```
 
+### UIタスク実装時
+```
+1. skills/frontend-design.md → デザインシンキング → デザイン決定書
+2. TDD + デザイン実装
+3. skills/frontend-design.md → スクリーンショット検証
+```
+
 ## 検証スクリプト
 
 ```bash

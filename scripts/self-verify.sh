@@ -150,7 +150,7 @@ verify_cicd() {
 verify_skills() {
     log_step "Step 6: スキル定義検証"
 
-    local required_skills=("test-run" "spec-validate" "self-improve" "code-review" "best-practices" "spec-create")
+    local required_skills=("test-run" "spec-validate" "self-improve" "code-review" "best-practices" "spec-create" "frontend-design")
     for skill in "${required_skills[@]}"; do
         if [ -f "$PROJECT_ROOT/skills/${skill}.md" ]; then
             log_pass "スキル: $skill"

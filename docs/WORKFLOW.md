@@ -187,12 +187,14 @@ PRレビューは単なるコード品質チェックではなく、ワークフ
 | `code-review` | PR前 | コード品質レビュー |
 | `best-practices` | マイルストーン完了時 | 業界水準検証 |
 | `spec-create` | 新機能企画時 | スペック作成支援 |
+| `frontend-design` | UIタスク実装時 | フロントエンドデザイン品質 |
 
 ### スキルパイプライン
 ```
 【実装完了】 test-run → code-review → best-practices → spec-validate
 【テスト失敗】 test-run → self-improve → test-run → code-review
 【新機能】 spec-create → spec-validate → test-run(Red) → 実装 → test-run(Green)
+【UI実装】 frontend-design(Step1) → test-run(Red) → 実装 → frontend-design(Step2-5) → test-run(Green) → code-review
 ```
 
 ---
