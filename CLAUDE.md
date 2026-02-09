@@ -1,99 +1,85 @@
 # Project Workflow - Claude Code 運用設定
 
 このファイルはClaude Codeがプロジェクトに参加した際に自動的に読み込まれる運用ルールです。
-
-## プロジェクト概要
-
-生成AI主導の開発ワークフロー基盤。**スペックが最重要成果物**であり、コードは再生成可能。
+チーム全員で改善し、git管理する（目安: 2.5kトークン以内）。
 
 ## 基本原則
 
-1. **Spec First**: `specs/` が唯一の仕様源。実装前に必ずスペックを確認
-2. **TDD**: スペック → テスト → 実装 の順序を厳守
-3. **1タスク = 1ブランチ = 1PR**: コンフリクト防止の最小ルール
-4. **GitHub = 唯一のHub**: 情報はすべてGitHub上で管理
+1. **検証ループが最重要**: テスト・ビルド・E2Eなど検証手段を必ず使う。検証なしでPRを出さない
+2. **Spec First**: `specs/` が唯一の仕様源。実装前に必ずスペックを確認
+3. **Plan → Implement**: いきなりコードを書かない。まず計画し、承認後に実装
+4. **TDD**: スペック → テスト → 実装 の順序を厳守
+5. **1タスク = 1ブランチ = 1PR**: コンフリクト防止の最小ルール
 
-## ディレクトリ構造と役割
+## 作業の流れ
 
 ```
-specs/          → 仕様書（最重要。変更はPR必須）
-tasks/          → タスク分解・実行計画
-agents/         → エージェント運用ガイド・チーム設定
-skills/         → 自律実行スキル定義（テスト・検証・改善）
-scripts/        → 自動化スクリプト（テスト実行・検証・VPSセットアップ）
-templates/      → 仕様/タスクテンプレート
-tests/          → テストコード（スペックに紐づく）
-docs/           → ワークフロー・運用ドキュメント
-.github/        → CI/CD・PRテンプレート
+1. /plan-and-implement で計画→承認
+2. TDD: テスト(Red) → 実装(Green) → リファクタ
+3. /verify-app で全検証（スペック・テスト・E2E・ビルド）
+4. 失敗 → skills/self-improve.md で自動修正（最大5回）
+5. /commit-push-pr でPR作成
+6. /update-claude-md で学びを記録
 ```
 
-## Agent Teams 運用ルール
+## スラッシュコマンド（.claude/commands/）
 
-### タスク実行前の必須手順
-1. `specs/SPEC-INDEX.md` でスペック一覧を確認
-2. `tasks/` で自分が担当するタスクを確認
-3. 担当タスクのステータスを `in_progress` に更新
-4. 専用ブランチを作成: `task/<task-id>-<短い説明>`
+| コマンド | 用途 |
+|----------|------|
+| `/commit-push-pr` | コミット→プッシュ→PR作成を一括実行 |
+| `/verify-app` | アプリ全体検証（最重要。品質2〜3倍） |
+| `/build-validator` | ビルド・リント・型チェック検証 |
+| `/code-simplifier` | コード簡素化・不要コード削除 |
+| `/plan-and-implement` | 計画→承認→TDD実装 |
+| `/update-claude-md` | 学びをCLAUDE.mdに反映 |
+
+## ディレクトリ構造
+
+```
+specs/           → 仕様書（最重要成果物）
+tasks/           → タスク分解・実行計画
+agents/          → エージェント運用ガイド
+skills/          → 自律実行スキル定義
+scripts/         → 自動化スクリプト
+tests/           → テスト（unit/ integration/ e2e/）
+templates/       → テンプレート
+.claude/commands → スラッシュコマンド（チーム共有）
+.claude/         → 権限・フック設定
+```
+
+## Agent Teams 運用
+
+### タスク実行前
+1. `specs/SPEC-INDEX.md` でスペック確認
+2. `tasks/` で担当タスク確認 → `in_progress` に更新
+3. ブランチ作成: `task/<task-id>-<名前>`
 
 ### ブランチ戦略
-- `main`: 安定版。直接pushは禁止
-- `task/<id>-<name>`: タスク実装用（1タスク1ブランチ）
-- `spec/<id>-<name>`: スペック変更用
-- `fix/<description>`: バグ修正用
+- `main`: 安定版（直接push禁止）
+- `task/<id>-<name>` / `spec/<id>-<name>` / `fix/<name>`
 
-### コンフリクト防止
-- タスクファイルの `status` フィールドで作業中を明示
-- スペック変更が必要な場合、実装PRより先にスペックPRを作成
-- `specs/` 以外の場所で仕様を記述しない
+## 検証コマンド
 
-## 自律実行スキル
-
-以下のスキルを必要に応じて実行する:
-
-| スキル | 用途 | 参照 |
-|--------|------|------|
-| test-run | テスト実行・結果分析 | `skills/test-run.md` |
-| spec-validate | スペック整合性検証 | `skills/spec-validate.md` |
-| self-improve | 自己改善ループ（テスト→修正→再テスト） | `skills/self-improve.md` |
-| code-review | コード品質レビュー | `skills/code-review.md` |
-| best-practices | 業界水準・ベストプラクティス検証 | `skills/best-practices.md` |
-
-### スキル実行タイミング
-- **実装完了時**: `test-run` → `code-review` → `best-practices`
-- **テスト失敗時**: `self-improve` （自動修正ループ）
-- **PR作成前**: `spec-validate` （スペック整合性確認）
-- **マイルストーン完了時**: 全スキルを順次実行
-
-## TDD ワークフロー
-
-```
-1. スペック読み込み (specs/<spec>.md)
-2. 受け入れ条件からテストケース生成
-3. テスト実装 (tests/)
-4. テスト実行 → 失敗を確認 (Red)
-5. 最小限の実装
-6. テスト実行 → 成功を確認 (Green)
-7. リファクタリング (Refactor)
-8. スペック受け入れ条件の全項目チェック
+```bash
+./scripts/run-tests.sh --unit    # ユニットテスト
+./scripts/run-tests.sh --e2e     # E2E（Playwright）
+./scripts/run-tests.sh --all     # 全テスト
+./scripts/validate-spec.sh       # スペック検証
+./scripts/self-verify.sh --full  # フル自己検証
 ```
 
-## PR作成ルール
+## ミスログ・学習記録
 
-- PRテンプレート（`.github/pull_request_template.md`）に従う
-- 種別（Spec / Task / Code）を明記
-- スペックへのリンクを必ず含める
-- テスト結果を貼付
-- レビュー依頼前に `scripts/validate-spec.sh` を実行
+Claudeがやらかしたミスと対策をここに記録する。PRレビュー時に `/update-claude-md` で更新。
 
-## CI/CD
+<!-- 例:
+- [2026-02-09] [E2E] テスト間で状態が共有されていた → beforeEachでリセットAPI呼び出し必須
+- [2026-02-09] [Jest] JestがPlaywright E2Eファイルを拾った → --testPathIgnorePatterns tests/e2e/ で除外
+-->
 
-- PR作成時: GitHub Actionsで自動テスト・スペック検証
-- main merge時: 統合テスト実行
-- VPS環境: E2E・統合テストの実行環境
+## チーム貢献ルール
 
-## 重要な注意事項
-
-- **スペックが正**: コードとスペックが矛盾したら、スペックを正とする
-- **小さなPR**: 大きな変更は分割して段階的にマージ
-- **自己検証**: PR作成前に必ずローカルでテストを実行
-- **ドキュメント同期**: 実装変更に伴うスペック更新を忘れない
+- CLAUDE.mdは**週次でチーム全員がレビュー・改善**する
+- PRレビューで発見した学びは即座に追記
+- 古い・解決済みのエントリは定期的に整理
+- 一般的すぎる内容は書かない（プロジェクト固有の知見のみ）

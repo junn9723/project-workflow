@@ -1,0 +1,24 @@
+{
+  "_comment": "Claude Code フック設定テンプレート。~/.claude/hooks.json にコピーして使用。",
+  "_docs": "https://docs.anthropic.com/en/docs/claude-code/hooks",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "_comment": "ファイル編集後に自動フォーマット（Claudeのコードは『だいたい』整形されているが最後の10%にムラがある）",
+        "matcher": "Edit|Write",
+        "command": "npm run format --silent 2>/dev/null || npx prettier --write \"$CLAUDE_FILE_PATH\" 2>/dev/null || true"
+      },
+      {
+        "_comment": "テスト関連ファイル編集後にリント",
+        "matcher": "Edit|Write",
+        "command": "npm run lint --silent 2>/dev/null || true"
+      }
+    ],
+    "PreCommit": [
+      {
+        "_comment": "コミット前にスペック検証",
+        "command": "./scripts/validate-spec.sh 2>/dev/null || true"
+      }
+    ]
+  }
+}

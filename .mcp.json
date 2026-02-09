@@ -1,0 +1,41 @@
+{
+  "_comment": "MCP (Model Context Protocol) サーバー設定テンプレート。プロジェクトに合わせてカスタマイズ。",
+  "_docs": "Claude CodeをコードエディタからワークフローHubへ拡張するための外部ツール連携設定。",
+  "mcpServers": {
+    "_playwright": {
+      "_comment": "E2Eテスト用。ブラウザ操作でUIテストを自動化",
+      "command": "npx",
+      "args": ["@anthropic/mcp-playwright"]
+    },
+    "_github": {
+      "_comment": "GitHub連携。Issue/PR操作をClaude Codeから直接実行",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "<your-token>"
+      }
+    },
+    "_slack": {
+      "_comment": "Slack連携。チーム通知・議論をClaude Codeから参照",
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-slack"],
+      "env": {
+        "SLACK_BOT_TOKEN": "<your-token>"
+      }
+    },
+    "_sentry": {
+      "_comment": "Sentry連携。エラー監視・バグ情報をClaude Codeから参照",
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-sentry"],
+      "env": {
+        "SENTRY_AUTH_TOKEN": "<your-token>"
+      }
+    }
+  },
+  "_setup_instructions": [
+    "1. 使用するサーバーのキー名からアンダースコア(_)を削除して有効化",
+    "2. 例: '_playwright' → 'playwright'",
+    "3. 環境変数の <your-token> を実際のトークンに置換",
+    "4. トークンは .env に保存し .mcp.json では参照のみにすることを推奨"
+  ]
+}

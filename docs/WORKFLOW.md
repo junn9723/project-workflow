@@ -7,6 +7,15 @@
 - 開発/テスト環境はVPS（人間の開発者ごとに割当）
 - Agent Teams（ClaudeCode内の並列エージェント）を活用してMVP開発を加速
 
+### 最重要原則: 検証ループ
+**検証ループが成果物の品質を2〜3倍にする。省略は厳禁。**
+
+```
+実装 → /verify-app → 失敗 → self-improve（最大5回） → /verify-app → 成功 → PR
+```
+
+検証なしでPRを出すことは禁止。`/verify-app` はスペック検証・ユニットテスト・E2Eテスト・ビルド・自己検証を一括実行する。
+
 ---
 
 ## 1. リポジトリ設計
@@ -38,25 +47,28 @@
 4. PRにてレビューし承認
 5. `skills/spec-validate.md` の基準で品質チェック
 
-### Phase B: MVP作成（ClaudeCode + Agent Teams）
-1. ClaudeCodeが `specs/` から全体設計
-2. タスク分解（`tasks/`、`templates/task-template.md` を使用）
-3. **Agent Teamsで並列実装**:
+### Phase B: MVP作成（Plan → Agent Teams → 検証）
+1. **`/plan-and-implement` で計画→承認**（いきなりコードを書かない）
+2. ClaudeCodeが `specs/` から全体設計
+3. タスク分解（`tasks/`、`templates/task-template.md` を使用）
+4. **Agent Teamsで並列実装**:
    - タスクをモジュール/レイヤー/TDDペアで分割（`agents/TEAMS.md` 参照）
    - 各Agentが担当タスクをTDDで実装
    - リーダー（ClaudeCode）が統合・検証
-4. 自律実行スキルによる品質担保:
+5. 自律実行スキルによる品質担保:
    - `skills/test-run.md` → テスト実行
    - `skills/self-improve.md` → テスト失敗時の自動修正
    - `skills/code-review.md` → コード品質レビュー
    - `skills/spec-validate.md` → スペック整合性確認
-5. MVPをGitHubへpush
+6. **`/verify-app` で全検証**（検証ループ必須）
+7. MVPをGitHubへpush
 
 ### Phase C: 並列開発開始
 1. MVP + 本フレームワークをベースに並列開発を開始
 2. Codexを含む複数エージェントで並列タスク実行
 3. 衝突回避: **1タスク = 1ブランチ = 1PR**
 4. 仕様に影響する変更は先にSpec PRを出す
+5. PRレビュー → `/update-claude-md` で学びを蓄積
 
 ---
 
@@ -126,6 +138,7 @@
 - PRは **Spec / Task / Code** のいずれかに分類
 - PRテンプレート（`.github/pull_request_template.md`）に従い記入
 - 必須項目: Specリンク・テスト結果・変更内容
+- PR作成には `/commit-push-pr` スラッシュコマンドを活用
 
 ### 5-2. CI/CD
 - **PR作成時**: GitHub Actionsで自動実行
@@ -135,15 +148,34 @@
   - スペック変更時はSPEC-INDEX更新確認
 - **VPS環境**: E2E・統合テスト
 
-### 5-3. レビューフロー
+### 5-3. レビューフロー（PRレビュー → 学習サイクル）
 1. PR作成 → CI自動実行
 2. CI全パス → レビュー依頼
 3. レビュー承認 → マージ
 4. タスクステータス更新
+5. **`/update-claude-md` でレビューの学びをCLAUDE.mdに記録**
+
+このサイクルがチームの集合知を蓄積する最重要フィードバックループ。
+PRレビューは単なるコード品質チェックではなく、ワークフロー改善の機会。
 
 ---
 
-## 6. スキル（自律実行手順）
+## 6. スラッシュコマンド（`.claude/commands/`）
+
+チーム共有のワークフローコマンド。Claude Codeから `/コマンド名` で実行。
+
+| コマンド | 用途 |
+|----------|------|
+| `/commit-push-pr` | コミット→プッシュ→PR作成を一括実行 |
+| `/verify-app` | アプリ全体検証（最重要。品質2〜3倍） |
+| `/build-validator` | ビルド・リント・型チェック検証 |
+| `/code-simplifier` | コード簡素化・不要コード削除 |
+| `/plan-and-implement` | 計画→承認→TDD実装 |
+| `/update-claude-md` | 学びをCLAUDE.mdに反映 |
+
+---
+
+## 7. スキル（自律実行手順）
 
 エージェントが自律的に実行可能な手順書。詳細は `skills/` を参照。
 
@@ -165,21 +197,26 @@
 
 ---
 
-## 7. 軽量でスピード感を出すための原則
+## 8. 軽量でスピード感を出すための原則
 - **Spec > Code** を徹底（スペックがあればコードは再生成可能）
 - PRは小さく、1タスク1PR
 - テンプレートを活用し、レビューを高速化
 - Agent Teamsで並列化してMVP開発を加速
 - 自律実行スキルで人間の介入を最小化
+- **検証ループを省略しない**（品質2〜3倍の効果）
 
 ---
 
-## 8. 開始手順
+## 9. 開始手順
 
 ### 新規プロジェクト開始
 1. 本リポジトリをClone
 2. `scripts/setup_vps.sh` でVPS環境をセットアップ
 3. `docs/WORKFLOW.md`（本ファイル）で運用ルールを確認
-4. `specs/` に最初のスペックを作成（`skills/spec-create.md` を参照）
-5. ClaudeCodeでMVP開発を開始（Agent Teams活用）
-6. MVP完了後に並列開発へ移行
+4. `CLAUDE.md` で運用原則・スラッシュコマンドを把握
+5. `.mcp.json` のMCPサーバーを必要に応じて有効化
+6. `specs/` に最初のスペックを作成（`skills/spec-create.md` を参照）
+7. `/plan-and-implement` で計画→承認
+8. ClaudeCodeでMVP開発を開始（Agent Teams活用）
+9. `/verify-app` で全検証を実行
+10. MVP完了後に並列開発へ移行
