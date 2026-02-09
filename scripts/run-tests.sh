@@ -5,8 +5,10 @@ set -euo pipefail
 # run-tests.sh - 統合テストランナー
 # ================================================================
 # 使用方法:
-#   ./scripts/run-tests.sh              # 全テスト実行
-#   ./scripts/run-tests.sh --all        # 全テスト実行（明示的）
+#   ./scripts/run-tests.sh              # ユニット+統合テスト実行
+#   ./scripts/run-tests.sh --all        # 全テスト実行（ユニット+E2E）
+#   ./scripts/run-tests.sh --unit       # ユニットテストのみ
+#   ./scripts/run-tests.sh --e2e        # E2Eテスト（Playwright）のみ
 #   ./scripts/run-tests.sh --changed    # 変更ファイルに関連するテストのみ
 #   ./scripts/run-tests.sh --coverage   # カバレッジレポート付き
 #   ./scripts/run-tests.sh [path]       # 指定パスのテスト実行
@@ -24,6 +26,11 @@ NC='\033[0m' # No Color
 log_info() { echo -e "${GREEN}[INFO]${NC} $1"; }
 log_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
+
+# E2E (Playwright) 検出
+has_playwright() {
+    [ -f "$PROJECT_ROOT/playwright.config.js" ] || [ -f "$PROJECT_ROOT/playwright.config.ts" ]
+}
 
 # テストフレームワーク自動検出
 detect_test_framework() {
@@ -54,6 +61,17 @@ detect_test_framework() {
     fi
 }
 
+# E2Eテスト実行 (Playwright)
+run_e2e_tests() {
+    if ! has_playwright; then
+        log_warn "playwright.config が見つかりません。E2Eテストをスキップします。"
+        return 0
+    fi
+
+    log_info "--- E2Eテスト (Playwright) ---"
+    cd "$PROJECT_ROOT" && npx playwright test
+}
+
 # テスト実行
 run_tests() {
     local framework="$1"
@@ -65,7 +83,7 @@ run_tests() {
 
     case "$framework" in
         jest)
-            local cmd="npx jest"
+            local cmd="npx jest --testPathIgnorePatterns tests/e2e/"
             [ -n "$target" ] && cmd="$cmd $target"
             [ "$coverage" = "true" ] && cmd="$cmd --coverage"
             eval "$cmd"
@@ -77,7 +95,7 @@ run_tests() {
             eval "$cmd"
             ;;
         pytest)
-            local cmd="pytest"
+            local cmd="pytest --ignore=tests/e2e"
             [ -n "$target" ] && cmd="$cmd $target"
             [ "$coverage" = "true" ] && cmd="$cmd --cov --cov-report=term-missing"
             eval "$cmd"
@@ -94,7 +112,6 @@ run_tests() {
         none)
             log_warn "テストフレームワークが検出されませんでした"
             log_info "tests/ ディレクトリを確認してください"
-            # テストディレクトリが存在するか確認
             if [ -d "$PROJECT_ROOT/tests" ]; then
                 log_info "tests/ ディレクトリは存在します。テストフレームワークをセットアップしてください。"
             else
@@ -115,14 +132,11 @@ get_changed_test_targets() {
         return
     fi
 
-    # 変更されたファイルに対応するテストファイルを探索
     local test_targets=""
     while IFS= read -r file; do
-        # テストファイル自体が変更された場合
         if echo "$file" | grep -qE '(test|spec)\.' ; then
             test_targets="$test_targets $file"
         fi
-        # ソースファイルに対応するテストを探索
         local basename
         basename=$(basename "$file" | sed 's/\.[^.]*$//')
         local test_file
@@ -137,18 +151,19 @@ get_changed_test_targets() {
 
 # メイン処理
 main() {
-    local mode="all"
+    local mode="unit"
     local target=""
     local coverage="false"
 
-    # 引数解析
     while [ $# -gt 0 ]; do
         case "$1" in
             --all) mode="all"; shift ;;
+            --unit) mode="unit"; shift ;;
+            --e2e) mode="e2e"; shift ;;
             --changed) mode="changed"; shift ;;
             --coverage) coverage="true"; shift ;;
             --help|-h)
-                echo "使用方法: $0 [--all|--changed|--coverage|path]"
+                echo "使用方法: $0 [--all|--unit|--e2e|--changed|--coverage|path]"
                 exit 0
                 ;;
             *) target="$1"; shift ;;
@@ -157,6 +172,7 @@ main() {
 
     log_info "=== テスト実行開始 ==="
     log_info "プロジェクト: $PROJECT_ROOT"
+    log_info "モード: $mode"
 
     local framework
     framework=$(detect_test_framework)
@@ -170,17 +186,34 @@ main() {
 
     local start_time
     start_time=$(date +%s)
+    local unit_ok=true
+    local e2e_ok=true
 
-    if run_tests "$framework" "$target" "$coverage"; then
-        local end_time
-        end_time=$(date +%s)
-        local duration=$((end_time - start_time))
+    # ユニット/統合テスト
+    if [ "$mode" != "e2e" ]; then
+        log_info "--- ユニット/統合テスト ---"
+        if ! run_tests "$framework" "$target" "$coverage"; then
+            unit_ok=false
+        fi
+    fi
+
+    # E2Eテスト
+    if [ "$mode" = "all" ] || [ "$mode" = "e2e" ]; then
+        if ! run_e2e_tests; then
+            e2e_ok=false
+        fi
+    fi
+
+    local end_time
+    end_time=$(date +%s)
+    local duration=$((end_time - start_time))
+
+    if $unit_ok && $e2e_ok; then
         log_info "=== テスト成功 (${duration}秒) ==="
         exit 0
     else
-        local end_time
-        end_time=$(date +%s)
-        local duration=$((end_time - start_time))
+        $unit_ok || log_error "ユニット/統合テスト失敗"
+        $e2e_ok || log_error "E2Eテスト失敗"
         log_error "=== テスト失敗 (${duration}秒) ==="
         exit 1
     fi
