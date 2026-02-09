@@ -1,33 +1,75 @@
 # 生成AI主導 開発ワークフロー（GitHub Hub）
 
-本リポジトリは「生成AI主導の開発ワークフロー」を軽量に開始するための初期セットです。**成果物の主軸はスペック**であり、コードは再生成可能であることを前提に設計しています。
+生成AI主導の開発ワークフローを軽量に開始するための初期セット。**成果物の主軸はスペック**であり、コードは再生成可能であることを前提に設計しています。
 
-## 目的
-- GitHubを情報共有・CI/CDの中心ハブとして運用する。
-- ClaudeCode（メイン）/ Codex（サブ）の並列開発に耐える最小限の整合性を確保する。
-- 仕様・タスク・テスト環境の**衝突/不整合を抑止**する。
-- エージェント向けのガイド（例: Claude.md）を共有し継続改善する。
-- VPSの開発/テスト環境を活用し、**TDD前提の自己改善ループ**を実現する。
+## 特徴
+- **Spec First**: スペックが最重要成果物。コードは再生成可能
+- **Agent Teams対応**: ClaudeCodeのAgent Teamsで並列MVP開発
+- **自律実行スキル**: テスト・検証・自己改善を自律的に実行
+- **TDD前提**: スペック → テスト → 実装の順序を厳守
+- **軽量・高速**: テンプレート駆動・1タスク1PRでスピード感を維持
 
 ## 最短の開始手順
 1. 本リポジトリをClone
-2. `docs/WORKFLOW.md` を読んで運用ルールを確認
-3. `specs/` にスペックを追加
-4. `tasks/` にタスク分解を追加
-5. MVP開発後に並列開発を開始
+2. `scripts/setup_vps.sh` でVPS環境をセットアップ
+3. `docs/WORKFLOW.md` で運用ルールを確認
+4. `specs/` にスペックを作成
+5. MVP開発 → 並列開発へ移行
 
 ## ディレクトリ構成
-- `docs/` : ワークフローや運用ルール
-- `specs/` : 仕様（最重要成果物）
-- `tasks/` : タスク分解/実行計画
-- `agents/` : エージェント運用ドキュメント（Claude/Codex）
-- `.github/` : GitHub運用テンプレート
-- `scripts/` : VPS/CIで使う運用スクリプト
-- `templates/` : 仕様/タスクのテンプレート
+
+```
+├── CLAUDE.md          → Claude Code プロジェクト設定（自動読み込み）
+├── specs/             → 仕様書（最重要成果物）
+│   └── SPEC-INDEX.md  → スペック一覧・状態管理
+├── tasks/             → タスク分解・実行計画
+├── agents/            → エージェント運用ガイド
+│   ├── CLAUDE.md      → ClaudeCode運用ガイド
+│   ├── CODEX.md       → Codex運用ガイド
+│   └── TEAMS.md       → Agent Teams連携ガイド
+├── skills/            → 自律実行スキル定義
+│   ├── test-run.md    → テスト実行・結果分析
+│   ├── spec-validate.md → スペック整合性検証
+│   ├── self-improve.md → 自己改善ループ
+│   ├── code-review.md → コード品質レビュー
+│   ├── best-practices.md → 業界水準検証
+│   └── spec-create.md → スペック作成支援
+├── scripts/           → 自動化スクリプト
+│   ├── run-tests.sh   → テスト実行
+│   ├── validate-spec.sh → スペック検証
+│   ├── self-verify.sh → 自己検証
+│   └── setup_vps.sh   → VPS環境セットアップ
+├── templates/         → テンプレート
+│   ├── spec-template.md → スペックテンプレート
+│   └── task-template.md → タスクテンプレート
+├── docs/              → ワークフロー・運用ドキュメント
+└── .github/           → CI/CD・PRテンプレート
+```
+
+## ワークフロー概要
+
+```
+Phase A: 仕様策定 → Phase B: MVP開発（Agent Teams） → Phase C: 並列開発
+```
+
+| Phase | 担当 | 内容 |
+|-------|------|------|
+| A | 人間 + ClaudeCode | スペック策定・レビュー |
+| B | ClaudeCode（Agent Teams） | MVP開発（TDD） |
+| C | ClaudeCode + Codex + 人間 | 並列タスク実行 |
+
+詳細は `docs/WORKFLOW.md` を参照。
+
+## 自律実行パイプライン
+
+```
+【実装完了】 test-run → code-review → best-practices → spec-validate
+【テスト失敗】 test-run → self-improve → test-run → code-review
+【新機能】 spec-create → spec-validate → test-run(Red) → 実装 → test-run(Green)
+```
 
 ## まず読むファイル
-- `docs/WORKFLOW.md`
-- `specs/README.md`
-- `agents/CLAUDE.md`
-- `agents/CODEX.md`
-
+1. `docs/WORKFLOW.md` - ワークフロー全体像
+2. `agents/CLAUDE.md` - ClaudeCode運用ガイド
+3. `agents/TEAMS.md` - Agent Teams連携ガイド
+4. `skills/README.md` - スキル一覧

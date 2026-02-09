@@ -1,7 +1,44 @@
-# Changelog (Agent Docs)
+# Changelog
 
-エージェント運用ガイドの変更履歴を記録します。
+エージェント運用ガイド・ワークフローの変更履歴。
 
-## Unreleased
-- Initial scaffold.
+## [v2.0.0] - 2026-02-09
 
+### 追加
+- `CLAUDE.md`（ルート）: Claude Code プロジェクト設定を追加
+- `agents/TEAMS.md`: Agent Teams連携ガイドを追加
+- `skills/`: 自律実行スキル群を追加
+  - `test-run.md`: テスト実行・結果分析
+  - `spec-validate.md`: スペック整合性検証
+  - `self-improve.md`: 自己改善ループ
+  - `code-review.md`: コード品質レビュー
+  - `best-practices.md`: 業界水準検証
+  - `spec-create.md`: スペック作成支援
+- `specs/SPEC-INDEX.md`: スペック一覧・状態管理
+- `scripts/run-tests.sh`: テスト実行スクリプト
+- `scripts/validate-spec.sh`: スペック検証スクリプト
+- `scripts/self-verify.sh`: 自己検証スクリプト
+- `.github/workflows/spec-validate.yml`: スペック検証ワークフロー
+- `tests/README.md`: テストガイド
+- `.gitignore`: Git除外設定
+
+### 改善
+- `agents/CLAUDE.md`: Agent Teams活用手順、スキル連携を追加
+- `agents/CODEX.md`: スキル連携、タスク取得手順を追加
+- `templates/spec-template.md`: メタデータ、トレーサビリティ表、設計メモを追加
+- `templates/task-template.md`: メタデータ、依存関係、完了チェックを追加
+- `scripts/setup_vps.sh`: 実用的なセットアップスクリプトに強化
+- `.github/workflows/ci.yml`: スペック検証・構造検証・テスト実行を追加
+- `.github/pull_request_template.md`: チェックリスト・テスト結果欄を追加
+- `docs/WORKFLOW.md`: Agent Teams、スキル、自己改善ループの記述を追加
+- `README.md`: ディレクトリ構成詳細、ワークフロー概要、パイプラインを追加
+
+## [v1.0.0] - 初期版
+
+### 追加
+- 基本ディレクトリ構成
+- ワークフロー概要
+- エージェント運用ガイド（ClaudeCode/Codex）
+- スペック/タスクテンプレート
+- GitHub Actions/PRテンプレート（スケルトン）
+- VPSセットアップスクリプト（スケルトン）
