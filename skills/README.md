@@ -7,10 +7,10 @@
 
 | スキル | ファイル | 用途 | 実行タイミング |
 |--------|----------|------|----------------|
-| test-run | `test-run.md` | テスト実行・結果分析 | 実装後・PR前 |
-| spec-validate | `spec-validate.md` | スペック整合性検証 | PR前・スペック更新時 |
+| test-run | `test-run.md` | テスト実行・結果分析 | 実装後・push前 |
+| spec-validate | `spec-validate.md` | スペック整合性検証 | push前・スペック更新時 |
 | self-improve | `self-improve.md` | 自己改善ループ | テスト失敗時 |
-| code-review | `code-review.md` | コード品質レビュー | PR前 |
+| code-review | `code-review.md` | コード品質レビュー | push前 |
 | best-practices | `best-practices.md` | 業界水準検証 | マイルストーン完了時 |
 | spec-create | `spec-create.md` | スペック作成支援 | 新機能企画時 |
 | frontend-design | `frontend-design.md` | フロントエンドデザイン品質 | UIタスク実装時 |

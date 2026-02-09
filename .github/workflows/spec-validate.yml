@@ -1,7 +1,7 @@
 name: Spec Validation
 
 on:
-  pull_request:
+  push:
     paths:
       - 'specs/**'
       - 'templates/spec-template.md'
@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: スペック構造検証
         run: |
@@ -21,13 +23,13 @@ jobs:
       - name: スペック変更差分の確認
         run: |
           echo "=== 変更されたスペック ==="
-          git diff --name-only origin/main...HEAD -- 'specs/' 2>/dev/null || echo "(差分なし)"
+          git diff --name-only HEAD~1 -- 'specs/' 2>/dev/null || echo "(差分なし)"
 
       - name: SPEC-INDEX更新確認
         run: |
           # specs/に新規ファイルが追加された場合、SPEC-INDEXも更新されているか
-          new_specs=$(git diff --name-only --diff-filter=A origin/main...HEAD -- 'specs/*.md' 2>/dev/null | grep -v 'README.md\|SPEC-INDEX.md' || echo "")
-          index_changed=$(git diff --name-only origin/main...HEAD -- 'specs/SPEC-INDEX.md' 2>/dev/null || echo "")
+          new_specs=$(git diff --name-only --diff-filter=A HEAD~1 -- 'specs/*.md' 2>/dev/null | grep -v 'README.md\|SPEC-INDEX.md' || echo "")
+          index_changed=$(git diff --name-only HEAD~1 -- 'specs/SPEC-INDEX.md' 2>/dev/null || echo "")
 
           if [ -n "$new_specs" ] && [ -z "$index_changed" ]; then
             echo "警告: 新規スペックが追加されましたが SPEC-INDEX.md が更新されていません"

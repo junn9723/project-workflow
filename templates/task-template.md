@@ -1,9 +1,8 @@
 # Task: <タイトル>
 
 > **Task ID**: <spec-id>-<task-number>（例: 001-01）
-> **ステータス**: pending | in_progress | review | done
+> **ステータス**: pending | in_progress | done
 > **担当**: claude | codex | agent-team-N | <名前>
-> **ブランチ**: task/<task-id>-<短い名前>
 > **作成日**: YYYY-MM-DD
 
 ## 1. 対応するSpec
@@ -26,7 +25,6 @@
 ## 5. 受け入れ条件
 - [ ] 対応するスペックのAC-Nが満たされること
 - [ ] テストが全パスすること
-- [ ] コードレビューが完了していること
 
 ## 6. テスト
 - [ ] 単体テスト: tests/...
@@ -36,4 +34,4 @@
 ## 7. 完了時チェック
 - [ ] スペック整合性検証済み（`scripts/validate-spec.sh`）
 - [ ] テスト全パス（`scripts/run-tests.sh`）
-- [ ] PR作成・レビュー依頼済み
+- [ ] `/verify-app` 全パス

@@ -1,7 +1,6 @@
 name: CI
 
 on:
-  pull_request:
   push:
     branches: ["main"]
 
@@ -67,27 +66,4 @@ jobs:
             ./scripts/run-tests.sh --all
           else
             echo "テストファイルが見つかりません。スキップします。"
-          fi
-
-  # PR種別チェック
-  pr-check:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: PR種別確認
-        run: |
-          # PRボディにSpec/Task/Codeのいずれかがチェックされているか確認
-          echo "PR種別チェック完了"
-
-      - name: スペック変更の確認
-        run: |
-          # specs/に変更がある場合、種別がSpecであることを確認
-          changed_specs=$(git diff --name-only origin/main...HEAD -- 'specs/' 2>/dev/null || echo "")
-          if [ -n "$changed_specs" ]; then
-            echo "スペック変更を検出:"
-            echo "$changed_specs"
-            echo "スペックPRとしてレビューしてください。"
           fi
