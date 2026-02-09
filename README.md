@@ -61,6 +61,10 @@ Phase A: 仕様策定 → Phase B: MVP開発（Agent Teams） → Phase C: 並�
 
 詳細は `docs/WORKFLOW.md` を参照。
 
+## Codex組み込み方針（要約）
+
+ClaudeCodeがオーケストレーションと人間向けインターフェースを担い、Codexは大規模テスト・コードレビュー・実装・仕様書レビューなどの定型タスクを担当します。作業依頼は `tasks/` で `assignee: codex` として明示し、成果物の形式や完了条件をタスク内で統一します。詳細な運用手順は `docs/WORKFLOW.md` を参照してください。
+
 ## 自律実行パイプライン
 
 ```
