@@ -39,10 +39,14 @@
 │   ├── run-tests.sh   → テスト実行
 │   ├── validate-spec.sh → スペック検証
 │   ├── self-verify.sh → 自己検証
+│   ├── verify-app.sh  → 統合検証（/verify-app）
+│   ├── mvp-verify.sh  → MVP証跡検証
 │   └── setup_vps.sh   → VPS環境セットアップ
 ├── templates/         → テンプレート
 │   ├── spec-template.md → スペックテンプレート
 │   └── task-template.md → タスクテンプレート
+│   └── mvp-evidence-template.md → MVP証跡テンプレート
+├── reports/           → 検証・レビュー証跡
 ├── docs/              → ワークフロー・運用ドキュメント
 └── .github/           → CI/CD
 ```

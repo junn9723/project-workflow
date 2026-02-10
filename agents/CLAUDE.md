@@ -21,7 +21,7 @@
    - タスクを独立した単位に分割（`agents/TEAMS.md` のパターン参照）
    - 各エージェントにスコープを割り当て
    - TDDサイクル: テスト → 実装 → テスト
-5. `/verify-app` で全検証
+5. `/verify-app` で全検証（MVP証跡含む）
 6. `/commit-push` でmainにpush
 
 ### Agent Teams 活用時のルール
@@ -31,7 +31,7 @@
 - 詳細は `agents/TEAMS.md` を参照
 
 ### 並列開発（Phase C）
-- MVP完了条件: Specの受け入れ条件を全て満たすこと
+- MVP完了条件: Specの受け入れ条件を全て満たし、`reports/mvp-evidence.md` に証跡があること
 - 完了後、Codex等の他エージェントと並列開発へ移行
 - タスクの割り当ては `tasks/` のステータスで管理
 - 並列作業時はブランチ分離を推奨
@@ -84,3 +84,4 @@
 - [ ] テストが全パス
 - [ ] `scripts/validate-spec.sh` が成功
 - [ ] `/verify-app` が全パス
+- [ ] `reports/mvp-evidence.md` に証跡がある

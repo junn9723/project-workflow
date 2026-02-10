@@ -42,7 +42,7 @@ jobs:
 
       - name: 必須ディレクトリ検証
         run: |
-          for dir in specs tasks agents skills scripts templates docs .github; do
+          for dir in specs tasks agents skills scripts templates reports docs .github; do
             if [ -d "$dir" ]; then
               echo "[PASS] $dir/"
             else

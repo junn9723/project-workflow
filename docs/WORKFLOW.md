@@ -15,7 +15,7 @@
 実装 → /verify-app → 失敗 → self-improve（最大5回） → /verify-app → 成功 → push
 ```
 
-検証なしでpushすることは禁止。`/verify-app` はスペック検証・ユニットテスト・E2Eテスト・ビルド・自己検証を一括実行する。
+検証なしでpushすることは禁止。`/verify-app`（`scripts/verify-app.sh`）はスペック検証・ユニットテスト・E2Eテスト・自己検証・**MVP証跡検証**を一括実行する。
 
 ---
 
@@ -61,6 +61,19 @@
    - `skills/spec-validate.md` → スペック整合性確認
 6. **`/verify-app` で全検証**（検証ループ必須）
 7. **`/commit-push` でmainにpush**
+
+### MVP完了ゲート（重要）
+MVP完了は「テストが通る」だけでは不十分。**証跡 + 受け入れ条件の充足**が必須。
+
+**必須条件**
+- Specの受け入れ条件（AC）が全て満たされている
+- `reports/mvp-evidence.md` に Spec: <ファイル名> の証跡がある
+- `/verify-app` が全パスしている
+
+**証跡の最低要件**
+- デモ手順（短い手順でOK）
+- 受け入れ条件のチェック（`[x]`）
+- スクリーンショット or 動画（パス/リンク）
 
 ### Phase C: 並列開発開始
 1. MVP + 本フレームワークをベースに並列開発を開始
@@ -197,6 +210,9 @@ push → 学びをCLAUDE.mdに追記
 
 # フル検証（全項目）
 ./scripts/self-verify.sh --full
+
+# 統合検証（MVP証跡含む）
+./scripts/verify-app.sh
 ```
 
 ---

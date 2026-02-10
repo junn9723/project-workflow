@@ -43,3 +43,4 @@
 - [ ] スペック整合性検証済み（`scripts/validate-spec.sh`）
 - [ ] テスト全パス（`scripts/run-tests.sh`）
 - [ ] `/verify-app` 全パス
+- [ ] `reports/mvp-evidence.md` に証跡を追記

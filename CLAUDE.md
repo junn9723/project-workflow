@@ -16,7 +16,7 @@
 ```
 1. /plan-and-implement で計画→承認
 2. TDD: テスト(Red) → 実装(Green) → リファクタ
-3. /verify-app で全検証（スペック・テスト・E2E・ビルド）
+3. /verify-app で全検証（スペック・テスト・E2E・自己検証・MVP証跡）
 4. 失敗 → skills/self-improve.md で自動修正（最大5回）
 5. /commit-push でmainにpush
 6. /update-claude-md で学びを記録
@@ -45,6 +45,7 @@ skills/          → 自律実行スキル定義
 scripts/         → 自動化スクリプト
 tests/           → テスト（unit/ integration/ e2e/）
 templates/       → テンプレート
+reports/         → 検証・レビュー証跡
 .claude/commands → スラッシュコマンド（チーム共有）
 .claude/         → 権限・フック設定
 ```
@@ -67,6 +68,7 @@ templates/       → テンプレート
 ./scripts/run-tests.sh --all     # 全テスト
 ./scripts/validate-spec.sh       # スペック検証
 ./scripts/self-verify.sh --full  # フル自己検証
+./scripts/verify-app.sh          # 統合検証（MVP証跡含む）
 ```
 
 ## ミスログ・学習記録

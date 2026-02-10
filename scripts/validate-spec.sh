@@ -43,8 +43,9 @@ validate_structure() {
         "## 3. ユースケース"
         "## 4. 要件"
         "## 5. 受け入れ条件"
-        "## 6. テスト方針"
-        "## 7. 仕様変更履歴"
+        "## 6. MVP完了条件"
+        "## 7. テスト方針"
+        "## 9. 仕様変更履歴"
     )
 
     for section in "${required_sections[@]}"; do
@@ -64,7 +65,7 @@ validate_structure() {
 
     # 変更履歴が初期状態のままでないか
     local history_content
-    history_content=$(sed -n '/## 7. 仕様変更履歴/,$ p' "$spec_file" | tail -n +2)
+    history_content=$(sed -n '/## 9. 仕様変更履歴/,$ p' "$spec_file" | tail -n +2)
     if [ -n "$history_content" ] && [ "$history_content" != "- Initial" ]; then
         log_pass "変更履歴が記載されている"
     else

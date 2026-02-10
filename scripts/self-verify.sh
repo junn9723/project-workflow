@@ -63,7 +63,7 @@ verify_structure() {
     log_step "Step 3: プロジェクト構造検証"
 
     # 必須ディレクトリ
-    local required_dirs=("specs" "tasks" "agents" "skills" "scripts" "templates" "docs" ".github")
+    local required_dirs=("specs" "tasks" "agents" "skills" "scripts" "templates" "docs" "reports" ".github")
     for dir in "${required_dirs[@]}"; do
         if [ -d "$PROJECT_ROOT/$dir" ]; then
             log_pass "ディレクトリ: $dir/"
@@ -198,6 +198,21 @@ show_summary() {
     fi
 }
 
+# Step 7: MVP完了証跡検証
+verify_mvp_evidence() {
+    log_step "Step 7: MVP完了証跡検証"
+
+    if [ -x "$SCRIPT_DIR/mvp-verify.sh" ]; then
+        if "$SCRIPT_DIR/mvp-verify.sh"; then
+            log_pass "MVP証跡検証"
+        else
+            log_fail "MVP証跡検証"
+        fi
+    else
+        log_skip "mvp-verify.sh が見つかりません"
+    fi
+}
+
 # メイン処理
 main() {
     local mode="${1:---quick}"
@@ -224,6 +239,7 @@ main() {
             ;;
     esac
 
+    verify_mvp_evidence
     show_summary
 }
 
