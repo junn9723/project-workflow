@@ -50,12 +50,26 @@ GitHub (Hub)
 
 ## タスク調整メカニズム
 
+## オーケストレーション・プロトコル
+
+### ジョブパケット
+`tasks/` はジョブパケットとして扱い、**目的/依存関係/変更範囲/成果物/ハンドオフ**を必ず明記する。
+
+### 担当とLease
+- タスク開始時に `status: in_progress` と `assignee` を更新
+- 30分以上の無更新は再割当候補（Lease失効）
+- 停止時は `blocked` と理由を明記して再割当可能にする
+
+### 成果物の提出
+- テスト結果/レビューはGitHub上に保存し、パスをタスクに追記
+- 受け入れ条件を満たさない成果物は `done` にできない
+
 ### 1. タスクの状態管理
 
 タスクファイル（`tasks/`）で状態を管理:
 
 ```markdown
-status: pending | in_progress | done
+status: pending | in_progress | blocked | done
 assignee: claude | codex | agent-team-N | human
 ```
 
