@@ -59,8 +59,9 @@
    - `skills/self-improve.md` → テスト失敗時の自動修正
    - `skills/code-review.md` → コード品質レビュー
    - `skills/spec-validate.md` → スペック整合性確認
-6. **`/verify-app` で全検証**（検証ループ必須）
-7. **`/commit-push` でmainにpush**
+6. 各implemented Specごとに `reports/spec-deliverables/<spec-file>.md` を作成
+7. **`/verify-app` で全検証**（検証ループ必須）
+8. **`/commit-push` でmainにpush**
 
 ### MVP完了ゲート（重要）
 MVP完了は「テストが通る」だけでは不十分。**証跡 + 受け入れ条件の充足**が必須。
@@ -68,12 +69,14 @@ MVP完了は「テストが通る」だけでは不十分。**証跡 + 受け入
 **必須条件**
 - Specの受け入れ条件（AC）が全て満たされている
 - `reports/mvp-evidence.md` に Spec: <ファイル名> の証跡がある
+- `reports/spec-deliverables/<spec-file>.md` が提出されている（コード以外の成果物）
 - `/verify-app` が全パスしている
 
 **証跡の最低要件**
 - デモ手順（短い手順でOK）
 - 受け入れ条件のチェック（`[x]`）
 - スクリーンショット or 動画（パス/リンク）
+- Deliverable Doc（`reports/spec-deliverables/<spec-file>.md`）へのリンク
 
 ### Phase C: 並列開発開始
 1. MVP + 本フレームワークをベースに並列開発を開始

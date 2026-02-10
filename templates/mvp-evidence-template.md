@@ -10,6 +10,7 @@
 
 ## Spec: 001-xxx.md
 - Evidence Links:
+  - Deliverable Doc: `reports/spec-deliverables/001-xxx.md`
   - Screenshot/Video: (path or link)
   - Demo Steps: (短い手順)
 - Acceptance Checklist:
@@ -21,6 +22,7 @@
 
 ## Spec: 002-yyy.md
 - Evidence Links:
+  - Deliverable Doc: `reports/spec-deliverables/002-yyy.md`
   - Screenshot/Video: (path or link)
   - Demo Steps: (短い手順)
 - Acceptance Checklist:

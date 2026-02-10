@@ -31,7 +31,8 @@
 1. `scripts/validate-spec.sh` を実行
 2. `scripts/run-tests.sh --all` を実行
 3. 検証全パス → mainにpush
-4. タスクファイルの `status` を `done` に更新
+4. `reports/spec-deliverables/<spec-file>.md` を作成し、`reports/mvp-evidence.md` にリンクを追記
+5. タスクファイルの `status` を `done` に更新
 
 ## 自律実行スキル
 

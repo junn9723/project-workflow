@@ -22,6 +22,7 @@ log_skip() { echo -e "${YELLOW}[SKIP]${NC} $1"; }
 
 SPEC_INDEX="$PROJECT_ROOT/specs/SPEC-INDEX.md"
 EVIDENCE_FILE="$PROJECT_ROOT/reports/mvp-evidence.md"
+DELIVERABLES_DIR="$PROJECT_ROOT/reports/spec-deliverables"
 
 collect_implemented_specs() {
     if [ ! -f "$SPEC_INDEX" ]; then
@@ -39,6 +40,50 @@ collect_implemented_specs() {
             }
         }
     ' "$SPEC_INDEX"
+}
+
+verify_deliverable_file() {
+    local spec_file="$1"
+    local deliverable_file="$DELIVERABLES_DIR/$spec_file"
+
+    if [ ! -f "$deliverable_file" ]; then
+        log_fail "成果物不足: $deliverable_file が存在しません"
+        return 1
+    fi
+
+    local required_sections=(
+        "## 1. 仕様サマリー"
+        "## 2. 実装内容（コード以外）"
+        "## 3. 検証結果"
+        "## 4. 残課題・フォローアップ"
+    )
+
+    local section
+    for section in "${required_sections[@]}"; do
+        if ! grep -q "$section" "$deliverable_file"; then
+            log_fail "成果物不足: $deliverable_file に必須セクションがありません ($section)"
+            return 1
+        fi
+    done
+
+    log_pass "成果物OK: $deliverable_file"
+    return 0
+}
+
+verify_evidence_link() {
+    local spec_file="$1"
+
+    if ! awk -v s="Spec: ${spec_file}" '
+        $0 ~ s {in_section=1; next}
+        in_section && $0 ~ /^## / {in_section=0}
+        in_section {print}
+    ' "$EVIDENCE_FILE" | grep -q "spec-deliverables/${spec_file}"; then
+        log_fail "証跡不足: ${spec_file} セクションに spec-deliverables/${spec_file} へのリンクがありません"
+        return 1
+    fi
+
+    log_pass "証跡リンクOK: ${spec_file}"
+    return 0
 }
 
 main() {
@@ -77,6 +122,14 @@ main() {
             failed=1
         else
             log_pass "証跡OK: ${spec_file}"
+        fi
+
+        if ! verify_evidence_link "$spec_file"; then
+            failed=1
+        fi
+
+        if ! verify_deliverable_file "$spec_file"; then
+            failed=1
         fi
     done
 

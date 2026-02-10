@@ -8,6 +8,7 @@
 - **自律実行スキル**: テスト・検証・自己改善を自律的に実行
 - **TDD前提**: スペック → テスト → 実装の順序を厳守
 - **検証済みなら即push**: 検証ループ通過後にmainへ直接push（スピード重視）
+- **非コード成果物を必須化**: 各implemented Specで `reports/spec-deliverables/<spec-file>.md` を提出
 
 ## 最短の開始手順
 1. 本リポジトリをClone
@@ -45,7 +46,8 @@
 ├── templates/         → テンプレート
 │   ├── spec-template.md → スペックテンプレート
 │   └── task-template.md → タスクテンプレート
-│   └── mvp-evidence-template.md → MVP証跡テンプレート
+│   ├── mvp-evidence-template.md → MVP証跡テンプレート
+│   └── spec-deliverable-template.md → Spec別の非コード成果物テンプレート
 ├── reports/           → 検証・レビュー証跡
 ├── docs/              → ワークフロー・運用ドキュメント
 └── .github/           → CI/CD
