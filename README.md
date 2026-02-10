@@ -76,6 +76,7 @@ ClaudeCodeがオーケストレーションと人間向けインターフェー�
 
 ## まず読むファイル
 1. `docs/WORKFLOW.md` - ワークフロー全体像
-2. `agents/CLAUDE.md` - ClaudeCode運用ガイド
-3. `agents/TEAMS.md` - Agent Teams連携ガイド
-4. `skills/README.md` - スキル一覧
+2. `docs/ORCHESTRATION.md` - オーケストレーション設計
+3. `agents/CLAUDE.md` - ClaudeCode運用ガイド
+4. `agents/TEAMS.md` - Agent Teams連携ガイド
+5. `skills/README.md` - スキル一覧
