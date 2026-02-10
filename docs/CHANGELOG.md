@@ -33,6 +33,18 @@
 - `docs/WORKFLOW.md`: Agent Teams、スキル、自己改善ループの記述を追加
 - `README.md`: ディレクトリ構成詳細、ワークフロー概要、パイプラインを追加
 
+
+## [v2.3.0] - 2026-02-10
+
+### 追加
+- `reports/manager-logs/README.md`: ClaudeCode（マネージャー）の割当/Skill監査ログの運用ルールを追加
+
+### 改善
+- `docs/ORCHESTRATION.md`: マネージャーログ（割当理由・Skill使用実績）を標準成果物として追加
+- `docs/WORKFLOW.md`: 実行ループにマネージャーログ記録ステップを追加
+- `templates/task-template.md`: オーケストレーション情報にマネージャーログ記録欄を追加
+- `README.md`: `reports/manager-logs/` の用途を反映
+
 ## [v2.2.0] - 2026-02-10
 
 ### 追加
