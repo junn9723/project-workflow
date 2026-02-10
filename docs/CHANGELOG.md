@@ -33,6 +33,19 @@
 - `docs/WORKFLOW.md`: Agent Teams、スキル、自己改善ループの記述を追加
 - `README.md`: ディレクトリ構成詳細、ワークフロー概要、パイプラインを追加
 
+## [v2.2.0] - 2026-02-10
+
+### 追加
+- `templates/spec-deliverable-template.md`: Specごとの非コード成果物（仕様サマリー、検証結果、残課題）テンプレートを追加
+
+### 改善
+- `scripts/mvp-verify.sh`: implemented Specごとに `reports/spec-deliverables/<spec-file>.md` の存在と必須セクションを検証するよう強化
+- `templates/mvp-evidence-template.md`: Deliverable Docリンクを必須証跡として追加
+- `templates/task-template.md`: 完了時チェックに非コード成果物の作成を追加
+- `templates/spec-template.md`: MVP完了条件に非コード成果物要件を追加
+- `docs/WORKFLOW.md`: MVP作成フェーズ/完了ゲートにDeliverable Doc必須化を追記
+- `README.md`: 非コード成果物必須化と新テンプレートを反映
+
 ## [v2.1.0] - 2026-02-10
 
 ### 追加

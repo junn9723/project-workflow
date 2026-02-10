@@ -43,4 +43,5 @@
 - [ ] スペック整合性検証済み（`scripts/validate-spec.sh`）
 - [ ] テスト全パス（`scripts/run-tests.sh`）
 - [ ] `/verify-app` 全パス
-- [ ] `reports/mvp-evidence.md` に証跡を追記
+- [ ] `reports/spec-deliverables/<spec-file>.md` を作成
+- [ ] `reports/mvp-evidence.md` に証跡を追記（Deliverable Docリンクを含む）
