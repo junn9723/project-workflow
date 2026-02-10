@@ -7,6 +7,12 @@
 > **想定サイズ**: S | M | L
 > **作成日**: YYYY-MM-DD
 
+## 0. チーム体制（必須）
+- **実行担当**: <name>
+- **レビュー担当**: <name>
+- **マネージャー（固定）**: ClaudeCode
+- **注記**: 単独実行は禁止。レビュー担当未設定のタスクは `in_progress` にしない。
+
 ## 1. 対応するSpec
 - `specs/<spec-file>.md`
 - 対応する受け入れ条件: AC-1, AC-2
@@ -44,3 +50,5 @@
 - [ ] テスト全パス（`scripts/run-tests.sh`）
 - [ ] `/verify-app` 全パス
 - [ ] `reports/mvp-evidence.md` に証跡を追記
+- [ ] レビュー担当の確認結果をタスクに記録
+- [ ] ClaudeCode（マネージャー）承認を記録
